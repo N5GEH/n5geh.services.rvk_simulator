@@ -1,0 +1,14 @@
+#!/bin/bash
+
+sudo apt-get update
+sudo apt-get install -y docker.io docker-compose
+sudo usermod -a -G docker vagrant
+
+echo -e "\ncd /vagrant" >> .bashrc
+sudo apt-get install mosquitto-clients -y
+
+echo -e "\nsudo sysctl -w vm.max_map_count=262144" >> /home/vagrant/.bashrc
+
+# echo -e "\nchmod +x service provision-devices subscription-orion" >> /home/vagrant/.bashrc
+
+echo -e "\n./service start" >> /home/vagrant/.bashrc

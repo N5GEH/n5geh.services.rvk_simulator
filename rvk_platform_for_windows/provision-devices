@@ -1,0 +1,118 @@
+#!/bin/bash
+#
+#  curl commands to reload the data from the previous tutorial
+#
+#
+
+set -e
+
+
+curl () {
+  docker run --network fiware_default --rm appropriate/curl -s \
+    "$@"
+}
+
+
+echo -e "⏳ Waiting for \033[1;36mIoT-Agent\033[0m to be available\n"
+while [ `curl -s -o /dev/null -w %{http_code} 'http://iot-agent:4041/iot/about/'` -eq 000 ]
+do 
+  echo -e "IoT Agent Server HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://iot-agent:4041/iot/about'` " (waiting for 200)"
+  sleep 1
+done
+printf "⏳ Provisioning IoT devices "
+
+
+#
+# Create a service group for all UltraLight IoT devices
+#
+
+curl -X POST \
+  'http://iot-agent:4041/iot/services' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+ "services": [
+   {
+     "apikey":      "QKAAbMxLbv5TfhFxjTv4lhw92m",
+     "cbroker":     "http://orion:1026",
+     "entity_type": "Thing",
+     "resource":    "/iot/d"
+   }
+ ]
+}'
+
+####################################################
+
+#
+# Provision FiPy sensor 001
+#
+
+curl -X POST \
+  'http://iot-agent:4041/iot/devices' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+ "devices": [
+  {
+     "device_id":   "urn:ngsi-ld:rvk:001",
+     "entity_name": "urn:ngsi-ld:rvk:001",
+     "entity_type": "rvk",
+     "protocol":    "PDI-IoTA-MQTT-UltraLigh",
+     "timezone":    "Europe/Berlin",
+     "transport": "MQTT",
+     "attributes": [
+        {"object_id": "T01_Sp01", "name": "T01_Sp01", "type":"Number"},
+        {"object_id": "T02_Sp02", "name": "T02_Sp02", "type":"Number"},
+        {"object_id": "T03_Sp03", "name": "T03_Sp03", "type":"Number"},
+        {"object_id": "T04_Sp04", "name": "T04_Sp04", "type":"Number"},
+        {"object_id": "T05_Sp05", "name": "T05_Sp05", "type":"Number"},
+        {"object_id": "T06_Sp06", "name": "T06_Sp06", "type":"Number"},
+        {"object_id": "T07_Sp07", "name": "T07_Sp07", "type":"Number"},
+        {"object_id": "T08_Sp08", "name": "T08_Sp08", "type":"Number"},
+        {"object_id": "T09_Sp09", "name": "T09_Sp09", "type":"Number"},
+        {"object_id": "T10_Sp10", "name": "T10_Sp10", "type":"Number"},
+        {"object_id": "T11_Sp11", "name": "T11_Sp11", "type":"Number"},
+        {"object_id": "T12_Sp12", "name": "T12_Sp12", "type":"Number"},
+        {"object_id": "T13_Sp13", "name": "T13_Sp13", "type":"Number"},
+        {"object_id": "T14_Sp14", "name": "T14_Sp14", "type":"Number"},
+        {"object_id": "T15_Sp15", "name": "T15_Sp15", "type":"Number"},
+        {"object_id": "T16_Sp16", "name": "T16_Sp16", "type":"Number"},
+        {"object_id": "T17_Sp17", "name": "T17_Sp17", "type":"Number"},
+        {"object_id": "T18_Sp18", "name": "T18_Sp18", "type":"Number"},
+        {"object_id": "T19_Sp19", "name": "T19_Sp19", "type":"Number"},
+        {"object_id": "T20_Sp20", "name": "T20_Sp20", "type":"Number"},
+        {"object_id": "T21_DomesticHotWater", "name": "T21_DomesticHotWater", "type":"Number"},
+        {"object_id": "T22_DomesticColdWater", "name": "T22_DomesticColdWater", "type":"Number"},
+        {"object_id": "T23_Supply_HeatingBeforeMixValve", "name": "T23_Supply_HeatingBeforeMixValve", "type":"Number"},
+        {"object_id": "T24_Return_HeatingCircuit", "name": "T24_Return_HeatingCircuit", "type":"Number"},
+        {"object_id": "T25_Supply_HeatingCircuit", "name": "T25_Supply_HeatingCircuit", "type":"Number"},
+        {"object_id": "T26_Supply_CHPunit", "name": "T26_Supply_CHPunit", "type":"Number"},
+        {"object_id": "T27_Return_CHPunit", "name": "T27_Return_CHPunit", "type":"Number"},
+        {"object_id": "T28_Supply_GasBoiler", "name": "T28_Supply_GasBoiler", "type":"Number"},
+        {"object_id": "T29_Return_GasBoiler", "name": "T29_Return_GasBoiler", "type":"Number"},
+        {"object_id": "T30_AmbientAirTemperature", "name": "T30_AmbientAirTemperature", "type":"Number"},
+        {"object_id": "V01_ColdDrinkingWater", "name": "V01_ColdDrinkingWater", "type":"Number"},
+        {"object_id": "V02_HeatingCircuit", "name": "V02_HeatingCircuit", "type":"Number"},
+        {"object_id": "V03_CHPunit", "name": "V03_CHPunit", "type":"Number"},
+        {"object_id": "V04_GasBoiler", "name": "V04_GasBoiler", "type":"Number"},
+        {"object_id": "Wh01_HeatSources", "name": "Wh01_HeatSources", "type":"Number"},
+        {"object_id": "Wh02_HeaterRod", "name": "Wh02_HeaterRod", "type":"Number"},
+        {"object_id": "Wh03_MainMeter", "name": "Wh03_MainMeter", "type":"Number"},
+        {"object_id": "Vgas01_MainMeter", "name": "Vgas01_MainMeter", "type":"Number"},
+        {"object_id": "Vgas02_CHPunit", "name": "Vgas02_CHPunit", "type":"Number"},
+        {"object_id": "iteration", "name": "iteration", "type":"Number"},
+        {"object_id": "chp_status", "name": "chp_status", "type":"Number"},
+        {"object_id": "boiler_status", "name": "boiler_status", "type":"Number"},
+        {"object_id": "control_valve_hub", "name": "control_valve_hub", "type":"Number"},
+        {"object_id": "storage_tank_too_cold_status", "name": "storage_tank_too_cold_status", "type":"Number"},
+        {"object_id": "mass_flow_dhw", "name": "mass_flow_dhw", "type":"Number"},
+        {"object_id": "mass_flow_heating_water", "name": "mass_flow_heating_water", "type":"Number"},
+        {"object_id": "elctric_heater_status", "name": "elctric_heater_status", "type":"Number"},
+        {"object_id": "turnover_time_of_one_seg_in_h", "name": "turnover_time_of_one_seg_in_h", "type":"Number"}
+     ]
+   }
+  ]
+}
+'

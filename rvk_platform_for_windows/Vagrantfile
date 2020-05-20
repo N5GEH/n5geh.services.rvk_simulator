@@ -1,0 +1,54 @@
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "ubuntu/bionic64"
+  config.disksize.size = '40GB'
+
+  config.vm.synced_folder ".", "/vagrant", type: "smb", 
+    mount_options: ["mfsymlinks"]
+
+  config.vm.network :forwarded_port, guest: 4200, host: 4200 # crate
+  config.vm.network :forwarded_port, guest: 3001, host: 3001 # grafana or dummy devices
+  config.vm.network :forwarded_port, guest: 3003, host: 3003 # grafana
+  config.vm.network :forwarded_port, guest: 4041, host: 4041 # iotagents
+  config.vm.network :forwarded_port, guest: 7896, host: 7896 # iotagents
+  config.vm.network :forwarded_port, guest: 1883, host: 1883 # mosquitto
+  config.vm.network :forwarded_port, guest: 9001, host: 9001 # mosquitto
+  config.vm.network :forwarded_port, guest: 27017, host: 27017 # mongodb
+  config.vm.network :forwarded_port, guest: 3000, host: 3000 # ngsi-proxy
+  config.vm.network :forwarded_port, guest: 1026, host: 1026 # orion
+  config.vm.network :forwarded_port, guest: 8668, host: 8668 # quantumleap
+  config.vm.network :forwarded_port, guest: 8888, host: 8888 # quantumleap
+  config.vm.network :forwarded_port, guest: 9000, host: 9000 # quantumleap
+
+  config.vm.network :forwarded_port, guest: 8083, host: 8083 # quantumleap
+  config.vm.network :forwarded_port, guest: 8086, host: 8086 # quantumleap
+  config.vm.network :forwarded_port, guest: 8090, host: 8090 # quantumleap
+
+  config.vm.network :forwarded_port, guest: 8080, host: 8080 # cadvisor
+
+  config.vm.network :forwarded_port, guest: 5601, host: 5601 # kibana
+
+  config.vm.network :forwarded_port, guest: 9200, host: 9200 # elasticsearch
+
+  config.vm.network :forwarded_port, guest: 24224, host: 24224 # fluentd
+
+  config.vm.network :forwarded_port, guest: 9090, host: 9090 # prometheus
+
+  config.vm.provider "virtualbox" do |v|
+        v.memory = 4096
+        v.cpus = 2
+        v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+        v.customize ["modifyvm", :id, "--ioapic", "on"]
+  end
+
+  # Provision for python
+  # config.vm.provision :shell, :path => "vagrant/provisioning/python.sh"
+
+  # Provision for docker
+  config.vm.provision :shell, :path => "vagrant/provisioning/docker.sh"
+
+  # Provision for common (system upgrade, gcc, etc.)
+  config.vm.provision :shell, :path => "vagrant/provisioning/common.sh"
+
+end

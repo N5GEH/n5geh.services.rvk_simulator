@@ -1,0 +1,143 @@
+#!/bin/bash
+#
+#  Command Line Interface to start all services associated with the Getting-Started Tutorial
+#
+#  For this tutorial the commands are merely a convenience script to run docker-compose
+#
+
+echo -e "⏳ Create subscription to Orion for QuantumLeap"
+
+set -e 
+
+curl () {
+  docker run --network fiware_default --rm appropriate/curl -s \
+    "$@"
+}
+
+
+curl -X POST \
+  'http://orion:1026/v2/subscriptions' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "description": "Notify QuantumLeap of all RVK virtual gateway data changed",
+  "subject": {
+    "entities": [
+      {
+        "idPattern": "urn:ngsi-ld:rvk.*"
+      }
+    ],
+    "condition": {
+      "attrs": [
+        "iteration",
+        "T01_Sp01",
+        "T02_Sp02",
+        "T03_Sp03",
+        "T04_Sp04",
+        "T05_Sp05",
+        "T06_Sp06",
+        "T07_Sp07",
+        "T08_Sp08",
+        "T09_Sp09",
+        "T10_Sp10",
+        "T11_Sp11",
+        "T12_Sp12",
+        "T13_Sp13",
+        "T14_Sp14",
+        "T15_Sp15",
+        "T16_Sp16",
+        "T17_Sp17",
+        "T18_Sp18",
+        "T19_Sp19",
+        "T20_Sp20",
+        "T21_DomesticHotWater",
+        "T22_DomesticColdWater",
+        "T23_Supply_HeatingBeforeMixValve",
+        "T24_Return_HeatingCircuit",
+        "T25_Supply_HeatingCircuit",
+        "T26_Supply_CHPunit",
+        "T27_Return_CHPunit",
+        "T28_Supply_GasBoiler",
+        "T29_Return_GasBoiler",
+        "T30_AmbientAirTemperature",
+        "V01_ColdDrinkingWater",
+        "V02_HeatingCircuit",
+        "V03_CHPunit",
+        "V04_GasBoiler",
+        "Vgas01_MainMeter",
+        "Vgas02_CHPunit",
+        "Wh01_HeatSources",
+        "Wh02_HeaterRod",
+        "Wh03_MainMeter",
+        "chp_status",
+        "boiler_status",
+        "control_valve_hub",
+        "storage_tank_too_cold_status",
+        "mass_flow_dhw",
+        "mass_flow_heating_water",
+        "elctric_heater_status",
+        "turnover_time_of_one_seg_in_h"
+      ]
+    }
+  },
+  "notification": {
+    "http": {
+      "url": "http://quantumleap:8668/v2/notify"
+    },
+    "attrs": [
+      "iteration",
+      "T01_Sp01",
+      "T02_Sp02",
+      "T03_Sp03",
+      "T04_Sp04",
+      "T05_Sp05",
+      "T06_Sp06",
+      "T07_Sp07",
+      "T08_Sp08",
+      "T09_Sp09",
+      "T10_Sp10",
+      "T11_Sp11",
+      "T12_Sp12",
+      "T13_Sp13",
+      "T14_Sp14",
+      "T15_Sp15",
+      "T16_Sp16",
+      "T17_Sp17",
+      "T18_Sp18",
+      "T19_Sp19",
+      "T20_Sp20",
+      "T21_DomesticHotWater",
+      "T22_DomesticColdWater",
+      "T23_Supply_HeatingBeforeMixValve",
+      "T24_Return_HeatingCircuit",
+      "T25_Supply_HeatingCircuit",
+      "T26_Supply_CHPunit",
+      "T27_Return_CHPunit",
+      "T28_Supply_GasBoiler",
+      "T29_Return_GasBoiler",
+      "T30_AmbientAirTemperature",
+      "V01_ColdDrinkingWater",
+      "V02_HeatingCircuit",
+      "V03_CHPunit",
+      "V04_GasBoiler",
+      "Vgas01_MainMeter",
+      "Vgas02_CHPunit",
+      "Wh01_HeatSources",
+      "Wh02_HeaterRod",
+      "Wh03_MainMeter",
+      "chp_status",
+      "boiler_status",
+      "control_valve_hub",
+      "storage_tank_too_cold_status",
+      "mass_flow_dhw",
+      "mass_flow_heating_water",
+      "elctric_heater_status",
+      "turnover_time_of_one_seg_in_h"
+    ],
+    "metadata": []
+  }
+}'
+
+
+echo -e " \033[1;32mdone\033[0m"
