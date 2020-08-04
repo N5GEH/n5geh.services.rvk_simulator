@@ -1,4 +1,4 @@
-A_basic_simulation
+# A_basic_simulation
 
 Example of configuration for a stand alone calculation of the gateway 
 It has no prerequisites, i.e. there is no need for the platform to run 

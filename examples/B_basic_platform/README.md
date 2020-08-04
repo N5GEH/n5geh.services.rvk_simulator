@@ -1,4 +1,4 @@
-B_basic_platform
+# B_basic_platform
 
 Examples of configuration for gateway running in artificial time and 
 communicating with the platform over localhost (127.0.0.1). It requires 
@@ -8,7 +8,7 @@ Both examples allow simulation of communication between the platform and
  simulator of gateway. Together they form the virtual power plant that 
  is controlled by the platform.
 
-Example bsp01_1plat4gw_noAuth_noDemo is the base solution with 
+**Example bsp01_1plat4gw_noAuth_noDemo** is the base solution with 
 simulation of data dispatch every in intervalls of 10 seconds.
 
 Example bsp03_1plat4gw_noAuth_Demo is a proposal for the configuration 

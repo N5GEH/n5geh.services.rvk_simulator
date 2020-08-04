@@ -1,4 +1,4 @@
-C_external_platform
+# C_external_platform
 
 Examples of configuration for gateway running in artificial time and 
 communicating with the platform of TU-Dresden along with authentication 
